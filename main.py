@@ -59,7 +59,7 @@ def revert_versions(service, files, ts):
                 break
 
 def main(folder: str, ts: str):
-    creds = google.auth.default()
+    creds, _ = google.auth.default()
     service = build("drive", "v3", credentials=creds)
 
     items = list(service, folder)
