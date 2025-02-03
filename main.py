@@ -2,9 +2,17 @@ import os.path
 import sys
 
 import google
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
 SCOPES = ["https://www.googleapis.com/auth/drive"]
+
+
+def auth():
+    creds, _ = google.auth.default(scopes=SCOPES)
+    if not creds or not creds.valid:
+        creds.refresh(Request())
+    return creds
 
 
 def list(service, parent):
@@ -59,7 +67,7 @@ def revert_versions(service, files, ts):
                 break
 
 def main(folder: str, ts: str):
-    creds, _ = google.auth.default()
+    creds = auth()
     service = build("drive", "v3", credentials=creds)
 
     items = list(service, folder)
